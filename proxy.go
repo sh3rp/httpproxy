@@ -7,13 +7,15 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
 func New(port int) {
-	log.Printf("Starting proxy on port " + string(port))
+	portNum := strconv.Itoa(port)
+	log.Printf("Starting proxy on port " + portNum)
 
-	ln, err := net.Listen("tcp", ":"+string(port))
+	ln, err := net.Listen("tcp", ":"+portNum)
 
 	if err != nil {
 		log.Fatal(err)
