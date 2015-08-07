@@ -18,13 +18,15 @@ func New(port int) {
 	ln, err := net.Listen("tcp", ":"+portNum)
 
 	if err != nil {
-		log.Fatal("New proxy listen: " + err)
+		log.Fatal("New proxy listen: ")
+		log.Fatal(err)
 	}
 
 	for {
 		conn, err := ln.Accept()
 		if err != nil {
-			log.Fatal("New proxy accept: " + err)
+			log.Fatal("New proxy accept: ")
+			log.Fatal(err)
 		}
 		go handleConnection(conn)
 	}
@@ -35,7 +37,8 @@ func handleConnection(c net.Conn) {
 
 	_, err := c.Read(buffer)
 	if err != nil {
-		log.Fatal("Reading buffer: " + err)
+		log.Fatal("Reading buffer: ")
+		log.Fatal(err)
 		return
 	}
 
@@ -56,7 +59,8 @@ func handleConnection(c net.Conn) {
 	req, err := http.NewRequest(tokens[0], tokens[1], nil)
 
 	if err != nil {
-		log.Fatal("Request generation: " + err)
+		log.Fatal("Request generation: ")
+		log.Fatal(err)
 		return
 	}
 
@@ -70,14 +74,16 @@ func handleConnection(c net.Conn) {
 	resp, err := client.Do(req)
 
 	if err != nil {
-		log.Fatal("Client execute: " + err)
+		log.Fatal("Client execute:")
+		log.Fatal(err)
 		return
 	}
 
 	content, err := ioutil.ReadAll(resp.Body)
 
 	if err != nil {
-		log.Fatal("Content retrieval: " + err)
+		log.Fatal("Content retrieval: ")
+		log.Fatal(err)
 		return
 	}
 
