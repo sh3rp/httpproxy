@@ -35,7 +35,8 @@ func handleConnection(c net.Conn) {
 
 	_, err := c.Read(buffer)
 	if err != nil {
-		log.Fatal("Error reading bytes")
+		log.Fatal(err)
+		return
 	}
 
 	var lines []string
