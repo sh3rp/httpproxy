@@ -27,18 +27,24 @@ func New(port int) {
 		if err != nil {
 			log.Fatal("New proxy accept: ")
 			log.Fatal(err)
+		} else {
+			go handleConnection(conn)
 		}
-		go handleConnection(conn)
 	}
 }
 
 func handleConnection(c net.Conn) {
 	buffer := make([]byte, 4096)
 
-	_, err := c.Read(buffer)
+	read, err := c.Read(buffer)
 	if err != nil {
 		log.Fatal("Reading buffer: ")
 		log.Fatal(err)
+		return
+	}
+
+	if read <= 0 {
+		log.Fatal("Read zero bytes")
 		return
 	}
 
@@ -53,8 +59,9 @@ func handleConnection(c net.Conn) {
 	}
 
 	request := lines[0]
+	log.Printf("LINE 0: " + request)
 	tokens := strings.Split(request, " ")
-	log.Printf(c.RemoteAddr().String() + " -> " + tokens[1])
+	log.Printf(c.RemoteAddr().String() + " <-> " + tokens[1])
 	client := &http.Client{}
 	req, err := http.NewRequest(tokens[0], tokens[1], nil)
 
